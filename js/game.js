@@ -69,11 +69,16 @@ var game = {
       this.displayBall();
       this.displayPlayers();
       this.initKeyboard(game.control.onKeyDown, game.control.onKeyUp);
+      this.initMouse(game.control.onMouseMove);
     },
 
     initKeyboard : function(onKeyDownFunction, onKeyUpFunction) {
        window.onkeydown = onKeyDownFunction;
        window.onkeyup = onKeyUpFunction;
+    },
+
+    initMouse : function(onMouseMoveFunction) {
+        window.onmousemove = onMouseMoveFunction;
     },
 
     displayScore : function(scorePlayer1, scorePlayer2) {
@@ -97,11 +102,22 @@ var game = {
     },
 
     movePlayers : function() {
-        if (game.playerOne.goUp && game.playerOne.posY > 0)
-          game.playerOne.posY-=5;
-        else if (game.playerOne.goDown && game.playerOne.posY < game.groundHeight - game.playerOne.height)
-          game.playerOne.posY+=5;
+        if ( game.control.controlSystem == "KEYBOARD" ) {
+          // keyboard control
+          if ( game.playerOne.goUp && game.playerOne.posY > 0) {
+            game.playerOne.posY-=5;
+          } else if ( game.playerOne.goDown && game.playerOne.posY < game.groundHeight - game.playerOne.height) {
+            game.playerOne.posY+=5;
+          }
+        } else if ( game.control.controlSystem == "MOUSE" ) {
+          // mouse control
+          if (game.playerOne.goUp && game.playerOne.posY > game.control.mousePointer && game.playerOne.posY > 0)
+            game.playerOne.posY-=5;
+          else if (game.playerOne.goDown && game.playerOne.posY < game.control.mousePointer && game.playerOne.posY < game.groundHeight - game.playerOne.height)
+            game.playerOne.posY+=5;
+        }
       },
+
 
     clearLayer : function(targetLayer) {
        targetLayer.clear();
