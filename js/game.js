@@ -58,7 +58,8 @@ var game = {
         posX : 30,
         posY : 200,
         goUp : false,
-        goDown : false
+        goDown : false,
+        originalPosition : "left"
       },
         
       playerTwo : {
@@ -68,7 +69,8 @@ var game = {
         posX : 650,
         posY : 200,
         goUp : false,
-        goDown : false
+        goDown : false,
+        originalPosition : "right"
       },
    
     init : function() {
@@ -89,6 +91,8 @@ var game = {
 
       this.wallSound = new Audio("./sound/pingMur.ogg");
       this.playerSound = new Audio("./sound/pingRaquette.ogg");
+
+      game.ai.setPlayerAndBall(this.playerTwo, this.ball);
     },
 
     initKeyboard : function(onKeyDownFunction, onKeyUpFunction) {
