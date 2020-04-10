@@ -39,16 +39,20 @@ var game = {
         width : 10,
         height : 50,
         color : "#FFFFFF",
-        posX : 10,
-        posY : 200
+        posX : 30,
+        posY : 200,
+        goUp : false,
+        goDown : false
       },
-       
+        
       playerTwo : {
         width : 10,
         height : 50,
         color : "#FFFFFF",
-        posX : 600,
-        posY : 200
+        posX : 650,
+        posY : 200,
+        goUp : false,
+        goDown : false
       },
    
     init : function() {
@@ -64,6 +68,12 @@ var game = {
       this.displayScore(0,0);
       this.displayBall();
       this.displayPlayers();
+      this.initKeyboard(game.control.onKeyDown, game.control.onKeyUp);
+    },
+
+    initKeyboard : function(onKeyDownFunction, onKeyUpFunction) {
+       window.onkeydown = onKeyDownFunction;
+       window.onkeyup = onKeyUpFunction;
     },
 
     displayScore : function(scorePlayer1, scorePlayer2) {
@@ -85,6 +95,13 @@ var game = {
        this.ball.bounce();
        this.displayBall();
     },
+
+    movePlayers : function() {
+        if (game.playerOne.goUp && game.playerOne.posY > 0)
+          game.playerOne.posY-=5;
+        else if (game.playerOne.goDown && game.playerOne.posY < game.groundHeight - game.playerOne.height)
+          game.playerOne.posY+=5;
+      },
 
     clearLayer : function(targetLayer) {
        targetLayer.clear();
