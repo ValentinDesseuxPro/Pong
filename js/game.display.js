@@ -2,16 +2,20 @@ game.display = {
     container : "",
      
     layer : {
-      name : "",
-      canvas : "",
-      context2D : "",
-      posX : null,
-      posY : null,
-      width : "",
-      height : "",
-      backgroundColor : "",
-      zIndex : ""
-    },
+        name : "",
+        canvas : "",
+        context2D : "",
+        posX : null,
+        posY : null,
+        width : "",
+        height : "",
+        backgroundColor : "",
+        zIndex : "",
+       
+        clear : function() {
+          this.context2D.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
+      },
    
     createLayer : function(name, width, height, htmlContainer , zIndex, backgroundColor, x, y) {
       var layer = Object.create(this.layer);
