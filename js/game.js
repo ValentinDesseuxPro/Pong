@@ -81,7 +81,8 @@ var game = {
         goDown : false,
         originalPosition : "left",
         score : 0,
-        ai : false
+        ai : false,
+        isSelected : false
       },
         
       playerTwo : {
@@ -94,7 +95,8 @@ var game = {
         goDown : false,
         originalPosition : "right",
         score : 0,
-        ai : true
+        ai : true,
+        isSelected : false
       },
    
     init : function() {
@@ -116,14 +118,14 @@ var game = {
 
       this.initKeyboard(game.control.onKeyDown, game.control.onKeyUp);
       this.initMouse(game.control.onMouseMove);
-      this.initStartGameButton();
+      this.checkIfBothPlayers();
 
       this.wallSound = new Audio("./sound/pingMur.ogg");
       this.playerSound = new Audio("./sound/pingRaquette.ogg");
 
       game.speedUpBall();
 
-      game.ai.setPlayerAndBall(this.playerTwo, this.ball);
+      //game.ai.setPlayerAndBall(this.playerTwo, this.ball);
     },
 
     initKeyboard : function(onKeyDownFunction, onKeyUpFunction) {
@@ -170,6 +172,7 @@ var game = {
           else if (game.playerOne.goDown && game.playerOne.posY < game.control.mousePointer && game.playerOne.posY < game.groundHeight - game.playerOne.height)
             game.playerOne.posY+=5;
         }
+
       },
 
 
@@ -188,7 +191,7 @@ var game = {
         }
       },
 
-      lostBall : function() {
+    lostBall : function() {
     if ( this.ball.lost(this.playerOne) ) {
       this.playerTwo.score++;
       if ( this.playerTwo.score > 4 ) {
@@ -310,6 +313,14 @@ var game = {
         setInterval(function() {
         game.ball.speedUp();
       }, 10000);
+      },
+
+    checkIfBothPlayers(){
+      if(this.playerOne.isSelected && this.playerTwo.isSelected){
+        document.getElementById("startGame").disabled=false;
+        this.initStartGameButton();
       }
+      else document.getElementById("startGame").disabled=true;
+    }
    
   };
