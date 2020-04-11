@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/accueil.css">
+  </head>
+    <body>
+   <div id="accueil">
+        <h1 class="menuItem">Ping Pong Online !</h1><br>
+        <h3 class="menuItem">Enter a room name</h3><br>
+        <div id="centerDiv">
+            <label for="RoomName">Name :</label>
+            <input id="RoomName" type="text">
+            <input id="createGame" type="button" value="Go" class="buttonClass" onclick="goTo()">
+        </div>
+    </div>
+   </body>
+   <script>
+       function goTo(){
+        window.location ="pong.html?roomName="+document.getElementById("RoomName").value;
+       }
+   </script>
+   </html>

@@ -76,7 +76,7 @@ var game = {
         height : 50,
         color : "#FFFFFF",
         posX : 30,
-        posY : 200,
+        posY : 175,
         goUp : false,
         goDown : false,
         originalPosition : "left",
@@ -89,7 +89,7 @@ var game = {
         height : 50,
         color : "#FFFFFF",
         posX : 650,
-        posY : 200,
+        posY : 175,
         goUp : false,
         goDown : false,
         originalPosition : "right",
@@ -101,13 +101,13 @@ var game = {
       this.divGame = document.getElementById("divGame");
       this.startGameButton = document.getElementById("startGame");
 
-      this.groundLayer = game.display.createLayer("terrain", this.groundWidth, this.groundHeight, this.divGame, 0, "#000000", 150, 50); 
+      this.groundLayer = game.display.createLayer("terrain", this.groundWidth, this.groundHeight, this.divGame, 0, "#000000", 250, 100); 
       game.display.drawRectangleInLayer(this.groundLayer, this.netWidth, this.groundHeight, this.netColor, this.groundWidth/2 - this.netWidth/2, 0);
 
-      this.scoreLayer = game.display.createLayer("score", this.groundWidth, this.groundHeight, this.divGame, 1, undefined, 150, 50);
+      this.scoreLayer = game.display.createLayer("score", this.groundWidth, this.groundHeight, this.divGame, 1, undefined, 250, 100);
       //game.display.drawTextInLayer(this.scoreLayer, "SCORE", "10px Arial", "#FF0000", 10, 10);
 
-      this.playersBallLayer = game.display.createLayer("joueursetballe", this.groundWidth, this.groundHeight, this.divGame, 2, undefined, 150, 50);
+      this.playersBallLayer = game.display.createLayer("joueursetballe", this.groundWidth, this.groundHeight, this.divGame, 2, undefined, 250, 100);
       //game.display.drawTextInLayer(this.playersBallLayer, "JOUEURSETBALLE", "10px Arial", "#FF0000", 100, 100);
 
       this.displayScore(0,0);
@@ -245,8 +245,12 @@ var game = {
 
       reinitGame : function() {
         this.ball.inGame = false;
+        this.ball.posX = 200;
+        this.ball.posY = 200;
         this.ball.speed = 1;
         this.playerOne.score = 0;
+        this.playerOne.posY = 175;
+        this.playerTwo.posY = 175;
         this.playerTwo.score = 0;
         this.scoreLayer.clear();
         this.displayScore(this.playerOne.score, this.playerTwo.score);

@@ -1,0 +1,28 @@
+.menuItem {
+    display:block;
+    margin:auto;
+    text-align: center;
+}
+
+
+
+#divGame{
+    display:block;
+    margin:auto;
+}
+
+#centerDiv {
+    text-align: center;
+}
+
+#accueil{
+    margin-top: 15%;
+}
+
+  
+.buttonClass{
+    width: 10%;
+    height: 5%;
+}
+  
+
