@@ -14,6 +14,7 @@
      sendPosition();
      game.displayPlayers();
      game.moveBall();
+     ballPosition();
       if ( game.ball.inGame ) {
           game.lostBall();
       }
@@ -25,6 +26,10 @@
    var sendPosition = function(){
     if ( game.playerOne.goDown || game.playerOne.goUp) socket.emit('moving', { roomId : this.newPong.getGameId(),player : 'player1' ,posY : game.playerOne.posY});
     else if ( game.playerTwo.goDown || game.playerTwo.goUp) socket.emit('moving', {roomId : this.newPong.getGameId(), player : 'player2' ,posY : game.playerTwo.posY});
+    }
+
+    var ballPosition = function(){
+        socket.emit('ball', {roomId :this.newPong.getGameId(), position : {posX : game.ball.posX, posY : game.ball.posY}});
     }
 
    let pong = game;
@@ -81,6 +86,13 @@ socket.on('player1move',(data)=>{
 
 socket.on('player2move',(data)=>{
     if(game.playerOne.amI)game.playerTwo.posY=data.posY;
+});
+
+socket.on('ballmove',(data)=>{
+    //if(game.ball.inGame){
+        game.ball.posX=data.position.posX;
+        game.ball.posY=data.position.posY;
+    //}
 });
 
 socket.on('err', (data) => {

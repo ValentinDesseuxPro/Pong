@@ -35,12 +35,15 @@ io.on('connection', function (socket) {
     
     
     socket.on('moving', (data)=>{
-        let room = io.nsps['/'].adapter.rooms[data.roomId];
         if(data.player==='player1'){
             socket.broadcast.to(data.roomId).emit('player1move', {posY : data.posY});
         }else if(data.player==='player2'){
             socket.broadcast.to(data.roomId).emit('player2move', {posY : data.posY});
         }
+    });
+
+    socket.on('ball', (data)=>{
+        socket.broadcast.to(data.roomId).emit('ballmove', {position : {posX : data.position.posX, posY : data.position.posY}});
     });
 
 
