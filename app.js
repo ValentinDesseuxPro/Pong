@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
 
 let roomName = 0;
 
-// Quand un client se connecte, on le note dans la console
+// Quand un client se connecte
 io.on('connection', function (socket) {
     socket.on('createNewGame',()=>{
         this.roomName = ++roomName;
@@ -30,6 +30,16 @@ io.on('connection', function (socket) {
             socket.emit('player2', {roomId: data.roomId})
         } else {
             socket.emit('err', { message: 'Partie en cours !' });
+        }
+    })
+    
+    
+    socket.on('moving', (data)=>{
+        let room = io.nsps['/'].adapter.rooms[data.roomId];
+        if(data.player==='player1'){
+            socket.broadcast.to(data.roomId).emit('player1move', {posY : data.posY});
+        }else if(data.player==='player2'){
+            socket.broadcast.to(data.roomId).emit('player2move', {posY : data.posY});
         }
     });
 

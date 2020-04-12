@@ -82,7 +82,8 @@ var game = {
         originalPosition : "left",
         score : 0,
         ai : false,
-        isSelected : false
+        isSelected : false,
+        amI : false,
       },
         
       playerTwo : {
@@ -96,7 +97,8 @@ var game = {
         originalPosition : "right",
         score : 0,
         ai : false,
-        isSelected : false
+        isSelected : false,
+        amI : false,
       },
    
     init : function() {
@@ -160,18 +162,35 @@ var game = {
     movePlayers : function() {
         if ( game.control.controlSystem == "KEYBOARD" ) {
           // keyboard control
-          if ( game.playerOne.goUp && game.playerOne.posY > 0) {
-            game.playerOne.posY-=5;
-          } else if ( game.playerOne.goDown && game.playerOne.posY < game.groundHeight - game.playerOne.height) {
-            game.playerOne.posY+=5;
+          if(game.playerOne.amI){
+            if ( game.playerOne.goUp && game.playerOne.posY > 0) {
+              game.playerOne.posY-=5;
+            } else if ( game.playerOne.goDown && game.playerOne.posY < game.groundHeight - game.playerOne.height) {
+              game.playerOne.posY+=5;
+            }
+          }
+          else if(game.playerTwo.amI){
+            if ( game.playerTwo.goUp && game.playerTwo.posY > 0) {
+              game.playerTwo.posY-=5;
+            } else if ( game.playerTwo.goDown && game.playerTwo.posY < game.groundHeight - game.playerTwo.height) {
+              game.playerTwo.posY+=5;
+            }
           }
         } else if ( game.control.controlSystem == "MOUSE" ) {
           // mouse control
-          if (game.playerOne.goUp && game.playerOne.posY > game.control.mousePointer && game.playerOne.posY > 0)
-            game.playerOne.posY-=5;
-          else if (game.playerOne.goDown && game.playerOne.posY < game.control.mousePointer && game.playerOne.posY < game.groundHeight - game.playerOne.height)
-            game.playerOne.posY+=5;
-        }
+          if(game.playerOne.amI){
+            if (game.playerOne.goUp && game.playerOne.posY > game.control.mousePointer && game.playerOne.posY > 0)
+              game.playerOne.posY-=5;
+            else if (game.playerOne.goDown && game.playerOne.posY < game.control.mousePointer && game.playerOne.posY < game.groundHeight - game.playerOne.height)
+              game.playerOne.posY+=5;
+            }
+          else if(game.playerTwo.amI){
+            if (game.playerTwo.goUp && game.playerTwo.posY > game.control.mousePointer && game.playerTwo.posY > 0)
+              game.playerTwo.posY-=5;
+            else if (game.playerTwo.goDown && game.playerTwo.posY < game.control.mousePointer && game.playerTwo.posY < game.groundHeight - game.playerTwo.height)
+              game.playerTwo.posY+=5;
+          }
+          }
 
       },
 

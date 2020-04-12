@@ -11,6 +11,7 @@
      // le code du jeu
      game.clearLayer(game.playersBallLayer);
      game.movePlayers();
+     sendPosition();
      game.displayPlayers();
      game.moveBall();
       if ( game.ball.inGame ) {
@@ -20,6 +21,11 @@
      game.collideBallWithPlayersAndAction();
      requestAnimId = window.requestAnimationFrame(main); // rappel de main au prochain rafraîchissement de la page
    }
+
+   var sendPosition = function(){
+    if ( game.playerOne.goDown || game.playerOne.goUp) socket.emit('moving', { roomId : this.newPong.getGameId(),player : 'player1' ,posY : game.playerOne.posY});
+    else if ( game.playerTwo.goDown || game.playerTwo.goUp) socket.emit('moving', {roomId : this.newPong.getGameId(), player : 'player2' ,posY : game.playerTwo.posY});
+    }
 
    let pong = game;
    let newPong;
@@ -34,10 +40,9 @@
 
 // Creation de la partie par P1
 socket.on('newGame', (data) => {
-    console.log('new Game');
     const message =`Game ID : ${data.roomId} Waiting a second player ...`;
-    newPong = new Game(data.roomId);
-    newPong.displayGame(message);
+    this.newPong = new Game(data.roomId);
+    this.newPong.displayGame(message);
     game.playerOne.isSelected=true;
 });
 
@@ -52,22 +57,30 @@ document.getElementById('joinGame').onclick = () => {
     player = new Player('right');
 };
 
+
 socket.on('player1', (data) => {
+    game.playerOne.amI=true;
     game.playerTwo.isSelected=true;
     initialisation();
-    newPong = new Game(data.roomId);
-    newPong.displayGame('Game Id : '+data.roomId);
+    //newPong = new Game(data.roomId);
+    this.newPong.displayGame('Game Id : '+data.roomId);
 });
 
 socket.on('player2', (data) => {
-    newPong = new Game(data.roomId);
-    newPong.displayGame();
+    this.newPong = new Game(data.roomId);
+    this.newPong.displayGame('Game Id : '+data.roomId);
     game.playerOne.isSelected=true;
     game.playerTwo.isSelected=true;
+    game.playerTwo.amI=true;
     initialisation();
 });
 
-socket.on('ReadyToPlay',(data)=>{
+socket.on('player1move',(data)=>{
+    if(game.playerTwo.amI)game.playerOne.posY=data.posY;
+});
+
+socket.on('player2move',(data)=>{
+    if(game.playerOne.amI)game.playerTwo.posY=data.posY;
 });
 
 socket.on('err', (data) => {
@@ -83,6 +96,9 @@ socket.on('err', (data) => {
         document.getElementById('menu').style.display='none';
         document.getElementById('completGame').style.display='block';
         document.getElementById('message').textContent=message;
+    }
+    getGameId(){
+        return this.roomId;
     }
 }
 
