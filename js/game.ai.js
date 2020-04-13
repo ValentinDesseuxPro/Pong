@@ -5,6 +5,9 @@ game.ai = {
     setPlayerAndBall : function(player, ball) {
         this.player = player;
         this.ball = ball;
+        this.player.ai = true;
+        this.player.ready = true;
+        this.player.isSelected = true;
       },
 
       move : function() {

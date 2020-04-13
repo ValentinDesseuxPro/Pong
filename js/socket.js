@@ -9,18 +9,23 @@
 
     var main = function () {
      // le code du jeu
+     if(!game.iaGame)
      readyCheck();
      game.clearLayer(game.playersBallLayer);
      game.movePlayers();
+     if(!game.iaGame)
      sendPosition();
      game.displayPlayers();
      game.moveBall();
+     if(!game.iaGame)
      ballPosition();
       if ( game.ball.inGame ) {
           game.lostBall();
+          if(!game.iaGame)
           scoreCheck();
       }
-      //game.ai.move();
+      if(game.iaGame)
+      game.ai.move();
      game.collideBallWithPlayersAndAction();
      requestAnimId = window.requestAnimationFrame(main); // rappel de main au prochain rafraîchissement de la page
    }
@@ -65,6 +70,16 @@
     socket.emit('createNewGame', {});
     player = new Player('left');
 };
+
+    document.getElementById('createGameIA').onclick = ()=>{
+        game.iaGame=true;
+        game.playerOne.amI=true;
+        document.getElementById('menu').style.display='none';
+        document.getElementById('completGame').style.display='block';
+        document.getElementById('startGame').disabled=false;
+        document.getElementById('message').textContent='Enjoy your game !'
+        initialisation();
+    }
 
 // Creation de la partie par P1
 socket.on('newGame', (data) => {

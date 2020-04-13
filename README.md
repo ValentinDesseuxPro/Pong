@@ -1,23 +1,33 @@
-Ceci est le projet de Pong réalisé dans le cadre de la matière TECHNOLOG.
+# Pong Game
 
-	Author : Valentin DESSEUX
+This is a Pong Game developed as part of a school project.
 
-Fonctionnement :
+## Author
 
-	- Créer une partie : cliquer sur le bouton "Create game".
-	- Rejoindre une partie : indiquer l'id de la partie et cliquer sur le bouton "Join game".
-	- Lancer la partie : les 2 joueurs doivent cliquer sur le bouton "Ready" (la partie ne se lancera pas avant).
-	- Engagement : Le joueur de gauche (créateur de la partie) effectue l'engagment puis ce sera le joueur ayant encaissé un but qui effectuera le prochain engagement.
-	- Tirer la balle : Pour tirer la balle, le joueur qui doit engager doit appuyer sur la touche espace.
-	- Vainqueur : le premier à 5 points.
-	- Relancer une partie : appuyez sur le bouton "Ready" (les deux joueurs doivent appuyer sur le bouton "Ready" pour lancer une nouvelle partie).
-	- Possibilités : Audio, jeu à la souris (décommenter la ligne 128 du fichier game.js).
+Valentin DESSEUX
 
-Technologies :
+## How to play ?
+
+	- Create a game : Click on the "Create game" button to create a new game either against another player or against AI.
+	- Join an online game : Indicate the Game Id and click on the "Join game" button.
+	- Start an online game : Both players have to click on the "Ready" button.
+	- Start an AI game : Click on the "Ready" button.
+	- Engage : Click on the space bar to engage the ball.
+	- Winner : The winner is the first player with 5 goals.
+	- Restart an online game : Both players have to click on the "Ready" button.
+	- Restart an AI game : Click on the "Ready" button.
+
+## Features :
+
+	- Play with an AI.
+	- Play online in a 1vs1.
+	- Audio effects.
+
+## Technologies :
 
 	- HTML
 	- CSS
 	- Javascript
-	- NodeJS (Socket.io et Express)
+	- NodeJS (Socket.io and Express)
 
 

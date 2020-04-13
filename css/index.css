@@ -21,9 +21,17 @@
 
   
 .buttonClass{
-    width: 10%;
-    height: 5%;
+    width: 120px;
+    height: 35px;
     border-radius: 5px;
+    background-color:white;
+    border : lightskyblue;
+    font-family: 'Comic Sans MS';
+}
+
+.buttonClass:hover:enabled{
+    background-color:grey;
+    color : white;
 }
 
 #welcome{
@@ -40,8 +48,8 @@ li{
 
 body{
     font-family: 'Comic Sans MS';
-    background: linear-gradient(blue,lightblue);
-    color:white;
+    background: linear-gradient(lightskyblue,lightblue);
+    color:black;
 }
 
 input {
@@ -49,6 +57,7 @@ input {
     height: 35px;
     border-radius: 5px;
     text-align: center;
+    font-family: 'Comic Sans MS';
 }
 
 canvas {

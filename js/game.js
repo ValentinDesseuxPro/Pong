@@ -7,6 +7,8 @@ var game = {
   groundLayer : null,  
   scoreLayer : null,
   playersBallLayer : null,
+  iaGame : false,
+  iaGameFinish : false,
  
   groundLayer : null,
   scorePosPlayer1 : 300,
@@ -76,7 +78,7 @@ var game = {
     playerOne : {
       width : 10,
       height : 50,
-      color : "Blue",
+      color : "#0093fe",
       posX : 30,
       posY : 175,
       goUp : false,
@@ -93,7 +95,7 @@ var game = {
     playerTwo : {
       width : 10,
       height : 50,
-      color : "Red",
+      color : "#bf0000",
       posX : 650,
       posY : 175,
       goUp : false,
@@ -115,25 +117,28 @@ var game = {
     game.display.drawRectangleInLayer(this.groundLayer, this.netWidth, this.groundHeight, this.netColor, this.groundWidth/2 - this.netWidth/2, 0);
 
     this.scoreLayer = game.display.createLayer("score", this.groundWidth, this.groundHeight, this.divGame, 1, undefined, 0, 0);
-    //game.display.drawTextInLayer(this.scoreLayer, "SCORE", "10px Arial", "#FF0000", 10, 10);
-
+    
     this.playersBallLayer = game.display.createLayer("joueursetballe", this.groundWidth, this.groundHeight, this.divGame, 2, undefined, 0, 0);
-    //game.display.drawTextInLayer(this.playersBallLayer, "JOUEURSETBALLE", "10px Arial", "#FF0000", 100, 100);
-
+    
     this.displayScore(0,0);
     this.displayBall();
     this.displayPlayers();
 
     this.initKeyboard(game.control.onKeyDown, game.control.onKeyUp);
     //this.initMouse(game.control.onMouseMove);
+    if(!this.iaGame)
     this.checkIfBothPlayers();
+    if(this.iaGame){
+    game.ai.setPlayerAndBall(this.playerTwo, this.ball);
+    this.initStartGameButton();
+    }
 
     this.wallSound = new Audio("./sound/pingMur.ogg");
     this.playerSound = new Audio("./sound/pingRaquette.ogg");
 
     game.speedUpBall();
 
-    //game.ai.setPlayerAndBall(this.playerTwo, this.ball);
+    
   },
 
   initKeyboard : function(onKeyDownFunction, onKeyUpFunction) {
@@ -227,6 +232,7 @@ var game = {
       this.beginingP2=false;
       this.playerTwo.score = 'V';
       this.gameOn = false;
+      this.iaGameFinish=true;
       this.ball.inGame = false;
       document.getElementById('messageWaiting').textContent='Click Ready to restart a game !';
       document.getElementById('messageWaiting').style.display='block';
@@ -248,6 +254,7 @@ var game = {
       this.beginingP2=false
       this.playerOne.score = 'V';
       this.gameOn = false;
+      this.iaGameFinish=true;
       this.ball.inGame = false;
       document.getElementById('messageWaiting').textContent='Click Ready to restart a game !';
       document.getElementById('messageWaiting').style.display='block';

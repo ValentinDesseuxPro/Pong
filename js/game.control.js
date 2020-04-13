@@ -97,11 +97,27 @@ game.control = {
     },
 
     onStartGameClickButton : function() {
-      if(game.playerOne.amI && !game.gameOn)game.beginingP1=true;
-      else if (game.playerTwo.amI && !game.gameOn)game.beginingP2=true;
-      if(!(game.beginingP1 && game.beginingP2) && !game.gameOn){
-        document.getElementById('messageWaiting').textContent='Waiting for the second player ...';
-        document.getElementById('messageWaiting').style.display='block';
+      if(!game.iaGame){
+        if(game.playerOne.amI && !game.gameOn)game.beginingP1=true;
+        else if (game.playerTwo.amI && !game.gameOn)game.beginingP2=true;
+        if(!(game.beginingP1 && game.beginingP2) && !game.gameOn){
+          document.getElementById('messageWaiting').textContent='Waiting for the second player ...';
+          document.getElementById('messageWaiting').style.display='block';
+        }
+
+    }else{
+      game.beginingP1=true
+      game.beginingP2=true;
+      game.playerTwo.ready=true;
+      game.playerOne.ready=true;
+      game.gameOn=true;
+      document.getElementById('startGame').disabled=true;
+      document.getElementById('messageWaiting').textContent='';
+      document.getElementById('messageWaiting').style.display='none';
+      if(game.iaGameFinish){
+        game.reinitGame();
+        game.iaGameFinish=false;
       }
+    }
     }
 }
