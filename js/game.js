@@ -220,7 +220,7 @@ var game = {
   if ( this.ball.lost(this.playerOne) ) {
     this.playerTwo.score++;
     this.playerOne.engaging = true;
-    if ( this.playerTwo.score > 0 ) {
+    if ( this.playerTwo.score > 4 ) {
       this.playerOne.ready=false;
       this.playerTwo.ready=false;
       this.beginingP1=false;
@@ -241,7 +241,7 @@ var game = {
   } else if ( this.ball.lost(this.playerTwo) ) {
     this.playerTwo.engaging = true;
     this.playerOne.score++;
-    if ( this.playerOne.score > 0 ) {
+    if ( this.playerOne.score > 4 ) {
       this.playerOne.ready=false;
       this.playerTwo.ready=false;
       this.beginingP1=false;
