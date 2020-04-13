@@ -76,7 +76,7 @@ var game = {
       playerOne : {
         width : 10,
         height : 50,
-        color : "#FFFFFF",
+        color : "Blue",
         posX : 30,
         posY : 175,
         goUp : false,
@@ -92,7 +92,7 @@ var game = {
       playerTwo : {
         width : 10,
         height : 50,
-        color : "#FFFFFF",
+        color : "Red",
         posX : 650,
         posY : 175,
         goUp : false,
@@ -109,13 +109,13 @@ var game = {
       this.divGame = document.getElementById("divGame");
       this.startGameButton = document.getElementById("startGame");
 
-      this.groundLayer = game.display.createLayer("terrain", this.groundWidth, this.groundHeight, this.divGame, 0, "#000000", 250, 150); 
+      this.groundLayer = game.display.createLayer("terrain", this.groundWidth, this.groundHeight, this.divGame, 0, "#000000", 0, 0); 
       game.display.drawRectangleInLayer(this.groundLayer, this.netWidth, this.groundHeight, this.netColor, this.groundWidth/2 - this.netWidth/2, 0);
 
-      this.scoreLayer = game.display.createLayer("score", this.groundWidth, this.groundHeight, this.divGame, 1, undefined, 250, 150);
+      this.scoreLayer = game.display.createLayer("score", this.groundWidth, this.groundHeight, this.divGame, 1, undefined, 0, 0);
       //game.display.drawTextInLayer(this.scoreLayer, "SCORE", "10px Arial", "#FF0000", 10, 10);
 
-      this.playersBallLayer = game.display.createLayer("joueursetballe", this.groundWidth, this.groundHeight, this.divGame, 2, undefined, 250, 150);
+      this.playersBallLayer = game.display.createLayer("joueursetballe", this.groundWidth, this.groundHeight, this.divGame, 2, undefined, 0, 0);
       //game.display.drawTextInLayer(this.playersBallLayer, "JOUEURSETBALLE", "10px Arial", "#FF0000", 100, 100);
 
       this.displayScore(0,0);
@@ -222,8 +222,9 @@ var game = {
         this.playerTwo.score = 'V';
         this.gameOn = false;
         this.ball.inGame = false;
-        document.getElementById('messageWaiting').textContent='Click Ready to restart a game';
+        document.getElementById('messageWaiting').textContent='Click Ready to restart a game !';
         document.getElementById('messageWaiting').style.display='block';
+        document.getElementById('startGame').disabled=false;
       } else {
         this.ball.inGame = false;
      
@@ -238,8 +239,9 @@ var game = {
         this.playerOne.score = 'V';
         this.gameOn = false;
         this.ball.inGame = false;
-        document.getElementById('messageWaiting').textContent='Click Ready to restart a game';
+        document.getElementById('messageWaiting').textContent='Click Ready to restart a game !';
         document.getElementById('messageWaiting').style.display='block';
+        document.getElementById('startGame').disabled=false;
       } else {
         this.ball.inGame = false;
  
@@ -285,6 +287,8 @@ var game = {
         this.playerTwo.posY = 175;
         this.playerTwo.score = 0;
         this.scoreLayer.clear();
+        this.playerOne.engaging=true;
+        this.playerTwo.engaging=false;
         this.displayScore(this.playerOne.score, this.playerTwo.score);
       },
 

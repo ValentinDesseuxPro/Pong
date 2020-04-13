@@ -100,12 +100,8 @@ game.control = {
         if(game.playerOne.amI && !game.gameOn)game.beginingP1=true;
         else if (game.playerTwo.amI && !game.gameOn)game.beginingP2=true;
         if(!(game.beginingP1 && game.beginingP2) && !game.gameOn){
-          document.getElementById('messageWaiting').textContent='Waiting the second player to be ready';
+          document.getElementById('messageWaiting').textContent='Waiting for the second player ...';
           document.getElementById('messageWaiting').style.display='block';
         }
-        /*if ( !game.gameOn) {
-            game.reinitGame();
-            game.gameOn = true;
-          }*/
       }
   }

@@ -43,10 +43,10 @@
     }
 
     var readyCheck = function(){
-        if(game.beginingP1 && !game.gameOn){
+        if(game.beginingP1 && !game.gameOn && game.playerOne.amI){
             socket.emit('ready',{roomId : this.newPong.getGameId(),player : 'player1'});
         }
-        if(game.beginingP2 && !game.gameOn){
+        if(game.beginingP2 && !game.gameOn  && game.playerTwo.amI){
             socket.emit('ready',{roomId : this.newPong.getGameId(),player : 'player2'});
         }
         
@@ -65,7 +65,7 @@
 
 // Creation de la partie par P1
 socket.on('newGame', (data) => {
-    const message =`Game ID : ${data.roomId} Waiting a second player ...`;
+    const message =`Game ID : ${data.roomId} ! Waiting a second player ...`;
     this.newPong = new Game(data.roomId);
     this.newPong.displayGame(message);
     game.playerOne.isSelected=true;
@@ -94,6 +94,7 @@ socket.on('player1', (data) => {
 socket.on('player2', (data) => {
     this.newPong = new Game(data.roomId);
     this.newPong.displayGame('Game Id : '+data.roomId);
+    document.getElementById('startGame').disabled=false;
     game.playerOne.isSelected=true;
     game.playerTwo.isSelected=true;
     game.playerTwo.amI=true;
@@ -122,13 +123,15 @@ socket.on('scoreUpdate',(data)=>{
     game.displayScore(game.playerOne.score,game.playerTwo.score);
     if(game.playerOne.amI && (game.playerOne.score==='V' || game.playerTwo.score==='V')){
         game.gameOn=false;
-        document.getElementById('messageWaiting').textContent='Click Ready to restart a game';
+        document.getElementById('messageWaiting').textContent='Click Ready to restart a game !';
         document.getElementById('messageWaiting').style.display='block';
+        document.getElementById('startGame').disabled=false;
     }
     else if(game.playerTwo.amI && (game.playerOne.score==='V' || game.playerTwo.score==='V')){
         game.gameOn=false;
-        document.getElementById('messageWaiting').textContent='Click Ready to restart a game';
+        document.getElementById('messageWaiting').textContent='Click Ready to restart a game !';
         document.getElementById('messageWaiting').style.display='block';
+        document.getElementById('startGame').disabled=false;
     }
 });
 
@@ -136,8 +139,10 @@ socket.on('playerReady',(data)=>{
     if(data.player==='player1')game.beginingP1=true;
     if(data.player==='player2')game.beginingP2=true;
     if( !game.gameOn && game.beginingP1 && game.beginingP2) {
+        //console.log('Ready : '+data.player);
         document.getElementById('messageWaiting').textContent='';
         document.getElementById('messageWaiting').style.display='none';
+        document.getElementById('startGame').disabled=true;
         game.reinitGame();
         game.gameOn = true;
         game.beginingP1=false;
