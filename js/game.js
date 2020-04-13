@@ -17,6 +17,8 @@ var game = {
     divGame : null,
     gameOn : false,
     startGameButton : null,
+    beginingP1 : false,
+    beginingP2 : false, 
 
     ball : {
         width : 10,
@@ -84,6 +86,7 @@ var game = {
         ai : false,
         isSelected : false,
         amI : false,
+        engaging : true,
       },
         
       playerTwo : {
@@ -99,19 +102,20 @@ var game = {
         ai : false,
         isSelected : false,
         amI : false,
+        engaging : false,
       },
    
     init : function() {
       this.divGame = document.getElementById("divGame");
       this.startGameButton = document.getElementById("startGame");
 
-      this.groundLayer = game.display.createLayer("terrain", this.groundWidth, this.groundHeight, this.divGame, 0, "#000000", 250, 100); 
+      this.groundLayer = game.display.createLayer("terrain", this.groundWidth, this.groundHeight, this.divGame, 0, "#000000", 250, 150); 
       game.display.drawRectangleInLayer(this.groundLayer, this.netWidth, this.groundHeight, this.netColor, this.groundWidth/2 - this.netWidth/2, 0);
 
-      this.scoreLayer = game.display.createLayer("score", this.groundWidth, this.groundHeight, this.divGame, 1, undefined, 250, 100);
+      this.scoreLayer = game.display.createLayer("score", this.groundWidth, this.groundHeight, this.divGame, 1, undefined, 250, 150);
       //game.display.drawTextInLayer(this.scoreLayer, "SCORE", "10px Arial", "#FF0000", 10, 10);
 
-      this.playersBallLayer = game.display.createLayer("joueursetballe", this.groundWidth, this.groundHeight, this.divGame, 2, undefined, 250, 100);
+      this.playersBallLayer = game.display.createLayer("joueursetballe", this.groundWidth, this.groundHeight, this.divGame, 2, undefined, 250, 150);
       //game.display.drawTextInLayer(this.playersBallLayer, "JOUEURSETBALLE", "10px Arial", "#FF0000", 100, 100);
 
       this.displayScore(0,0);
@@ -119,7 +123,7 @@ var game = {
       this.displayPlayers();
 
       this.initKeyboard(game.control.onKeyDown, game.control.onKeyUp);
-      this.initMouse(game.control.onMouseMove);
+      //this.initMouse(game.control.onMouseMove);
       this.checkIfBothPlayers();
 
       this.wallSound = new Audio("./sound/pingMur.ogg");
@@ -213,10 +217,13 @@ var game = {
     lostBall : function() {
     if ( this.ball.lost(this.playerOne) ) {
       this.playerTwo.score++;
+      this.playerOne.engaging = true;
       if ( this.playerTwo.score > 4 ) {
         this.playerTwo.score = 'V';
         this.gameOn = false;
         this.ball.inGame = false;
+        document.getElementById('messageWaiting').textContent='Click Ready to restart a game';
+        document.getElementById('messageWaiting').style.display='block';
       } else {
         this.ball.inGame = false;
      
@@ -225,11 +232,14 @@ var game = {
         }
       }
     } else if ( this.ball.lost(this.playerTwo) ) {
+      this.playerTwo.engaging = true;
       this.playerOne.score++;
       if ( this.playerOne.score > 4 ) {
         this.playerOne.score = 'V';
         this.gameOn = false;
         this.ball.inGame = false;
+        document.getElementById('messageWaiting').textContent='Click Ready to restart a game';
+        document.getElementById('messageWaiting').style.display='block';
       } else {
         this.ball.inGame = false;
  

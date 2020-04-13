@@ -9,6 +9,7 @@
 
     var main = function () {
      // le code du jeu
+     readyCheck();
      game.clearLayer(game.playersBallLayer);
      game.movePlayers();
      sendPosition();
@@ -17,6 +18,7 @@
      ballPosition();
       if ( game.ball.inGame ) {
           game.lostBall();
+          scoreCheck();
       }
       //game.ai.move();
      game.collideBallWithPlayersAndAction();
@@ -29,7 +31,25 @@
     }
 
     var ballPosition = function(){
+    if(game.ball.inGame)
         socket.emit('ball', {roomId :this.newPong.getGameId(), position : {posX : game.ball.posX, posY : game.ball.posY}});
+    }
+
+    var scoreCheck = function(){
+        if(game.ball.lost(game.playerOne))
+            socket.emit('score',{roomId : this.newPong.getGameId(), player : 'player1', score :{player1 : game.playerOne.score, player2 : game.playerTwo.score}});
+        else if(game.ball.lost(game.playerTwo))
+            socket.emit('score',{roomId : this.newPong.getGameId(), player : 'player2', score :{player1 : game.playerOne.score, player2 : game.playerTwo.score}});
+    }
+
+    var readyCheck = function(){
+        if(game.beginingP1 && !game.gameOn){
+            socket.emit('ready',{roomId : this.newPong.getGameId(),player : 'player1'});
+        }
+        if(game.beginingP2 && !game.gameOn){
+            socket.emit('ready',{roomId : this.newPong.getGameId(),player : 'player2'});
+        }
+        
     }
 
    let pong = game;
@@ -89,10 +109,41 @@ socket.on('player2move',(data)=>{
 });
 
 socket.on('ballmove',(data)=>{
-    //if(game.ball.inGame){
         game.ball.posX=data.position.posX;
         game.ball.posY=data.position.posY;
-    //}
+});
+
+socket.on('scoreUpdate',(data)=>{
+    if(data.player==='player1')game.playerOne.engaging=true;
+    else if(data.player==='player2')game.playerTwo.engaging=true;
+    game.playerOne.score=data.score.player1;
+    game.playerTwo.score=data.score.player2;
+    game.scoreLayer.clear();
+    game.displayScore(game.playerOne.score,game.playerTwo.score);
+    if(game.playerOne.amI && (game.playerOne.score==='V' || game.playerTwo.score==='V')){
+        game.gameOn=false;
+        document.getElementById('messageWaiting').textContent='Click Ready to restart a game';
+        document.getElementById('messageWaiting').style.display='block';
+    }
+    else if(game.playerTwo.amI && (game.playerOne.score==='V' || game.playerTwo.score==='V')){
+        game.gameOn=false;
+        document.getElementById('messageWaiting').textContent='Click Ready to restart a game';
+        document.getElementById('messageWaiting').style.display='block';
+    }
+});
+
+socket.on('playerReady',(data)=>{
+    if(data.player==='player1')game.beginingP1=true;
+    if(data.player==='player2')game.beginingP2=true;
+    if( !game.gameOn && game.beginingP1 && game.beginingP2) {
+        document.getElementById('messageWaiting').textContent='';
+        document.getElementById('messageWaiting').style.display='none';
+        game.reinitGame();
+        game.gameOn = true;
+        game.beginingP1=false;
+        game.beginingP2=false;
+      }
+
 });
 
 socket.on('err', (data) => {

@@ -26,17 +26,22 @@ game.control = {
         }
         
         if ( event.keyCode == game.keycode.SPACEBAR && !game.ball.inGame && game.gameOn) {
-            game.ball.inGame = true;
-            if(game.playerOne.amI){
+            if(game.playerOne.amI && game.playerOne.engaging){
+              game.ball.inGame = true;
               game.ball.posX = game.playerOne.posX + game.playerOne.width;
               game.ball.posY = game.playerOne.posY;
               game.ball.directionX = 1;
-            }else if(game.playerTwo.amI){
+              game.ball.directionY = 1;
+              game.playerOne.engaging = false;
+            }else if(game.playerTwo.amI && game.playerTwo.engaging){
+              game.ball.inGame = true;
               game.ball.posX = game.playerTwo.posX - game.playerTwo.width;
               game.ball.posY = game.playerTwo.posY;
               game.ball.directionX = -1;
+              game.ball.directionY = 1;
+              game.playerTwo.engaging = false;
             }
-            game.ball.directionY = 1;
+            
           }
       },
    
@@ -92,9 +97,15 @@ game.control = {
       },
 
       onStartGameClickButton : function() {
-        if ( !game.gameOn ) {
+        if(game.playerOne.amI && !game.gameOn)game.beginingP1=true;
+        else if (game.playerTwo.amI && !game.gameOn)game.beginingP2=true;
+        if(!(game.beginingP1 && game.beginingP2) && !game.gameOn){
+          document.getElementById('messageWaiting').textContent='Waiting the second player to be ready';
+          document.getElementById('messageWaiting').style.display='block';
+        }
+        /*if ( !game.gameOn) {
             game.reinitGame();
             game.gameOn = true;
-          }
+          }*/
       }
   }

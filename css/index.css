@@ -24,5 +24,19 @@
     width: 10%;
     height: 5%;
 }
-  
 
+#welcome{
+    margin-top: 45px;;
+}
+  
+#joinGame{
+    margin-top: 15px;
+}
+
+li{
+    list-style-type: none;
+}
+
+body{
+    font-family: 'Comic Sans MS';
+}

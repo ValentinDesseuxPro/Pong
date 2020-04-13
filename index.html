@@ -4,16 +4,28 @@
   </head>
     <body>
    <div id="menu">
-    <h3 class="menuItem">Enter a room name</h3><br>
+     <div class="menuItem">
+     <h1 id="Welcome">Welcome to Ping-Pong Online !</h1>
+    <h3>To create a game :</h3>
+        <p>-Click the button "Create game".</p>
       <div class="centerDiv">
-        <input id="RoomName" type="text" placeholder="Room Name">
         <button id="createGame" class="buttonClass" >Create game</button>
-        <button id="joinGame" class="buttonClass" >Join game</button>
+      </div>
+      <h3>To join a game : </h3>
+        <p>-Enter the room Id.<br>
+        -Click the button "Join game".</p>
+     </div>
+      <div class="centerDiv">
+        <input id="RoomName" type="text" placeholder="Room Id">
       </div>  
+      <div class="centerDiv">
+      <button id="joinGame" class="buttonClass" >Join game</button>
+    </div>
     </div>
     <div id='completGame' style='display:none;' class='centerDiv'>
       <p id="message"></p>
-      <input id="startGame" type="button" value="Start Game" class="menuItem buttonClass">
+      <input id="startGame" type="button" value="Ready" class="menuItem buttonClass">
+      <p id="messageWaiting"></p>
       <div id="divGame"></div>
   </div>
     </body>

@@ -46,6 +46,13 @@ io.on('connection', function (socket) {
         socket.broadcast.to(data.roomId).emit('ballmove', {position : {posX : data.position.posX, posY : data.position.posY}});
     });
 
+    socket.on('score', (data)=>{
+        socket.broadcast.to(data.roomId).emit('scoreUpdate', {player : data.player ,score :{player1 : data.score.player1, player2 : data.score.player2}});
+    })
+
+    socket.on('ready', (data)=>{
+        socket.broadcast.to(data.roomId).emit('playerReady',{player : data.player});
+    });
 
     socket.on('disconnect', function () {
         io.emit('user disconnected');
