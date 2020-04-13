@@ -48,9 +48,10 @@ io.on('connection', function (socket) {
 
     socket.on('score', (data)=>{
         socket.broadcast.to(data.roomId).emit('scoreUpdate', {player : data.player ,score :{player1 : data.score.player1, player2 : data.score.player2}});
-    })
+    });
 
     socket.on('ready', (data)=>{
+        socket.emit('playerReady',{player : data.player});
         socket.broadcast.to(data.roomId).emit('playerReady',{player : data.player});
     });
 
