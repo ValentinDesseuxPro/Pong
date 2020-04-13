@@ -43,15 +43,18 @@
     }
 
     var readyCheck = function(){
-        if(game.beginingP1 && !game.gameOn && game.playerOne.amI){
+        if(game.beginingP1 && !game.playerOne.ready && game.playerOne.amI){
             socket.emit('ready',{roomId : this.newPong.getGameId(),player : 'player1'});
+            game.playerOne.ready=true;
         }
-        if(game.beginingP2 && !game.gameOn  && game.playerTwo.amI){
+        if(game.beginingP2 && !game.playerTwo.ready  && game.playerTwo.amI){
             socket.emit('ready',{roomId : this.newPong.getGameId(),player : 'player2'});
+            game.playerTwo.ready=true;
         }
         
     }
 
+    
    let pong = game;
    let newPong;
    let player;
@@ -87,7 +90,6 @@ socket.on('player1', (data) => {
     game.playerOne.amI=true;
     game.playerTwo.isSelected=true;
     initialisation();
-    //newPong = new Game(data.roomId);
     this.newPong.displayGame('Game Id : '+data.roomId);
 });
 
@@ -126,20 +128,27 @@ socket.on('scoreUpdate',(data)=>{
         document.getElementById('messageWaiting').textContent='Click Ready to restart a game !';
         document.getElementById('messageWaiting').style.display='block';
         document.getElementById('startGame').disabled=false;
+        game.playerOne.ready=false;
+        game.playerTwo.ready=false;
+        game.beginingP1=false;
+        game.beginingP2=false;
     }
     else if(game.playerTwo.amI && (game.playerOne.score==='V' || game.playerTwo.score==='V')){
         game.gameOn=false;
         document.getElementById('messageWaiting').textContent='Click Ready to restart a game !';
         document.getElementById('messageWaiting').style.display='block';
         document.getElementById('startGame').disabled=false;
+        game.playerOne.ready=false;
+        game.playerTwo.ready=false;
+        game.beginingP1=false;
+        game.beginingP2=false;
     }
 });
 
 socket.on('playerReady',(data)=>{
     if(data.player==='player1')game.beginingP1=true;
     if(data.player==='player2')game.beginingP2=true;
-    if( !game.gameOn && game.beginingP1 && game.beginingP2) {
-        //console.log('Ready : '+data.player);
+    if(game.beginingP1 && game.beginingP2) {
         document.getElementById('messageWaiting').textContent='';
         document.getElementById('messageWaiting').style.display='none';
         document.getElementById('startGame').disabled=true;
