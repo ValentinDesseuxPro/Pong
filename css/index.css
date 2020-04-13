@@ -1,0 +1,59 @@
+.menuItem {
+    display:block;
+    margin:auto;
+    text-align: center;
+}
+
+
+
+#divGame{
+    display:block;
+    margin:auto;
+}
+
+.centerDiv {
+    text-align: center;
+}
+
+#accueil{
+    margin-top: 15%;
+}
+
+  
+.buttonClass{
+    width: 10%;
+    height: 5%;
+    border-radius: 5px;
+}
+
+#welcome{
+    margin-top: 45px;;
+}
+  
+#joinGame{
+    margin-top: 15px;
+}
+
+li{
+    list-style-type: none;
+}
+
+body{
+    font-family: 'Comic Sans MS';
+    background: linear-gradient(blue,lightblue);
+    color:white;
+}
+
+input {
+    width : 200px;
+    height: 35px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+canvas {
+    bottom :0;
+    right: 0;
+    margin: auto;
+    margin-top: 150px;
+}
