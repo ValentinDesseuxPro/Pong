@@ -11,6 +11,7 @@ Fonctionnement :
 	- Tirer la balle : Pour tirer la balle, le joueur qui doit engager doit appuyer sur la touche espace.
 	- Vainqueur : le premier à 5 points.
 	- Relancer une partie : appuyez sur le bouton "Ready" (les deux joueurs doivent appuyer sur le bouton "Ready" pour lancer une nouvelle partie).
+	- Possibilités : Audio, jeu à la souris (décommenter la ligne 128 du fichier game.js).
 
 Technologies :
 
