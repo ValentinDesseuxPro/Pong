@@ -37,4 +37,4 @@ Use the package manager npm to install and run the project.
 	npm install
 	npm start
 
-Open [https://localhost:8080/](https://localhost:8080/) to play the game.
+Open [localhost:8080/](http://localhost:8080/) to play the game.
