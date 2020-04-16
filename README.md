@@ -8,19 +8,20 @@ Valentin DESSEUX
 
 ## How to play ?
 
-	- Create a game : Click on the "Create game" button to create a new game either against another player or against AI.
+	- Create a game : Click on one of the "Create game" buttons to create a new game either against one or more players or against the AI.
 	- Join an online game : Indicate the Game Id and click on the "Join game" button.
-	- Start an online game : Both players have to click on the "Ready" button.
+	- Start an online game : All players have to click on the "Ready" button.
 	- Start an AI game : Click on the "Ready" button.
 	- Engage : Click on the space bar to engage the ball.
 	- Winner : The winner is the first player with 5 goals.
-	- Restart an online game : Both players have to click on the "Ready" button.
+	- Restart an online game : All players have to click on the "Ready" button.
 	- Restart an AI game : Click on the "Ready" button.
 
 ## Features :
 
 	- Play with an AI.
 	- Play online in a 1vs1.
+	- Play online in a 2vs2.
 	- Audio effects.
 
 ## Technologies :

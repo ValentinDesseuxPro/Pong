@@ -12,11 +12,13 @@ app.get("/", (req, res) => {
 });
 
 let roomName = 0;
+let nbPlayer = 0;
 
 // Quand un client se connecte
 io.on('connection', function (socket) {
-    socket.on('createNewGame',()=>{
+    socket.on('createNewGame',(data)=>{
         this.roomName = ++roomName;
+        nbPlayer = data.nbPlayer;
         socket.join(`room-`+roomName);
         socket.emit('newGame', { roomId : `room-${roomName}` });
     })
@@ -24,12 +26,30 @@ io.on('connection', function (socket) {
     // Connect the Player 2 to the room he requested. Show error if room full.
     socket.on('joinGame', function (data) {
         let room = io.nsps['/'].adapter.rooms[data.roomId];
-        if (room && room.length === 1) {
-            socket.join(data.roomId);
-            socket.broadcast.to(data.roomId).emit('player1', {roomId : data.roomId});
-            socket.emit('player2', {roomId: data.roomId})
-        } else {
-            socket.emit('err', { message: 'Partie en cours !' });
+        if(nbPlayer==2){
+            if (room && room.length === 1) {
+                socket.join(data.roomId);
+                socket.broadcast.to(data.roomId).emit('player1', {roomId : data.roomId});
+                socket.emit('player2', {roomId: data.roomId})
+            } else {
+                socket.emit('err', { message: 'Sorry the room is full !' });
+            }
+        }else if(nbPlayer==4){
+            if (room && room.length === 1) {
+                socket.join(data.roomId);
+                socket.broadcast.to(data.roomId).emit('newPlayer', {roomId : data.roomId, player : 2});
+                socket.emit('2V2player2', {roomId: data.roomId})
+            }else if (room && room.length === 2) {
+                socket.join(data.roomId);
+                socket.broadcast.to(data.roomId).emit('newPlayer', {roomId : data.roomId, player : 3});
+                socket.emit('2V2player3', {roomId: data.roomId})
+            }else if (room && room.length === 3) {
+                socket.join(data.roomId);
+                socket.broadcast.to(data.roomId).emit('newPlayer', {roomId : data.roomId, player : 4});
+                socket.emit('2V2player4', {roomId: data.roomId})
+            }else {
+                socket.emit('err', { message: 'Sorry the room is full !' });
+            }
         }
     })
     
@@ -39,7 +59,12 @@ io.on('connection', function (socket) {
             socket.broadcast.to(data.roomId).emit('player1move', {posY : data.posY});
         }else if(data.player==='player2'){
             socket.broadcast.to(data.roomId).emit('player2move', {posY : data.posY});
+        }else if(data.player==='player3'){
+            socket.broadcast.to(data.roomId).emit('player3move', {posY : data.posY});
+        }else if(data.player==='player4'){
+            socket.broadcast.to(data.roomId).emit('player4move', {posY : data.posY});
         }
+        
     });
 
     socket.on('ball', (data)=>{

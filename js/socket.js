@@ -33,6 +33,8 @@
    var sendPosition = function(){
     if ( game.playerOne.goDown || game.playerOne.goUp) socket.emit('moving', { roomId : this.newPong.getGameId(),player : 'player1' ,posY : game.playerOne.posY});
     else if ( game.playerTwo.goDown || game.playerTwo.goUp) socket.emit('moving', {roomId : this.newPong.getGameId(), player : 'player2' ,posY : game.playerTwo.posY});
+    else if ( game.playerThree.goDown || game.playerThree.goUp) socket.emit('moving', {roomId : this.newPong.getGameId(), player : 'player3' ,posY : game.playerThree.posY});
+    else if ( game.playerFour.goDown || game.playerFour.goUp) socket.emit('moving', {roomId : this.newPong.getGameId(), player : 'player4' ,posY : game.playerFour.posY});
     }
 
     var ballPosition = function(){
@@ -48,13 +50,32 @@
     }
 
     var readyCheck = function(){
-        if(game.beginingP1 && !game.playerOne.ready && game.playerOne.amI){
-            socket.emit('ready',{roomId : this.newPong.getGameId(),player : 'player1'});
-            game.playerOne.ready=true;
-        }
-        if(game.beginingP2 && !game.playerTwo.ready  && game.playerTwo.amI){
-            socket.emit('ready',{roomId : this.newPong.getGameId(),player : 'player2'});
-            game.playerTwo.ready=true;
+        if(!game.twoVStwo){
+            if(game.beginingP1 && !game.playerOne.ready && game.playerOne.amI){
+                socket.emit('ready',{roomId : this.newPong.getGameId(),player : 'player1'});
+                game.playerOne.ready=true;
+            }
+            if(game.beginingP2 && !game.playerTwo.ready  && game.playerTwo.amI){
+                socket.emit('ready',{roomId : this.newPong.getGameId(),player : 'player2'});
+                game.playerTwo.ready=true;
+            }
+        }else{
+            if(game.beginingP1 && !game.playerOne.ready && game.playerOne.amI){
+                socket.emit('ready',{roomId : this.newPong.getGameId(),player : 'player1'});
+                game.playerOne.ready=true;
+            }
+            if(game.beginingP2 && !game.playerTwo.ready  && game.playerTwo.amI){
+                socket.emit('ready',{roomId : this.newPong.getGameId(),player : 'player2'});
+                game.playerTwo.ready=true;
+            }
+            if(game.beginingP3 && !game.playerThree.ready  && game.playerThree.amI){
+                socket.emit('ready',{roomId : this.newPong.getGameId(),player : 'player3'});
+                game.playerThree.ready=true;
+            }
+            if(game.beginingP4 && !game.playerFour.ready  && game.playerFour.amI){
+                socket.emit('ready',{roomId : this.newPong.getGameId(),player : 'player4'});
+                game.playerFour.ready=true;
+            }
         }
         
     }
@@ -67,8 +88,9 @@
 
    //creation du joueur 1 de gauche
    document.getElementById('createGame').onclick = ()=> {
-    socket.emit('createNewGame', {});
-    player = new Player('left');
+    //game.oneVSone=true;
+    socket.emit('createNewGame', {nbPlayer : 2});
+    //player = new Player('left');
 };
 
     document.getElementById('createGameIA').onclick = ()=>{
@@ -79,11 +101,22 @@
         document.getElementById('startGame').disabled=false;
         document.getElementById('message').textContent='Enjoy your game !'
         initialisation();
-    }
+    };
+
+document.getElementById('createGame2vs2').onclick = ()=>{
+    game.twoVStwo = true;
+    socket.emit('createNewGame', {nbPlayer : 4});
+};
 
 // Creation de la partie par P1
 socket.on('newGame', (data) => {
-    const message =`Game ID : ${data.roomId} ! Waiting a second player ...`;
+    let message;
+    if(!game.twoVStwo)
+        message =`Game ID : ${data.roomId} ! Waiting a second player ...`;
+    else{ 
+        message = `Game ID : ${data.roomId} ! Waiting other players ...`;
+        game.playerOne.amI=true;
+    }
     this.newPong = new Game(data.roomId);
     this.newPong.displayGame(message);
     game.playerOne.isSelected=true;
@@ -96,8 +129,14 @@ document.getElementById('joinGame').onclick = () => {
         alert('Please enter the name of the game.');
         return;
     }
-    socket.emit('joinGame', {roomId: roomID });
-    player = new Player('right');
+    if(!game.twoVStwo){
+        socket.emit('joinGame', {roomId: roomID, places : 2});
+        //player = new Player('right');
+    }
+    else{
+        socket.emit('joinGame', {roomId: roomID, places : 4});
+    }
+    
 };
 
 
@@ -106,6 +145,16 @@ socket.on('player1', (data) => {
     game.playerTwo.isSelected=true;
     initialisation();
     this.newPong.displayGame('Game Id : '+data.roomId);
+});
+
+socket.on('newPlayer',(data)=>{
+    if(data.player==2)game.playerTwo.isSelected=true;
+    else if(data.player==3)game.playerThree.isSelected=true;
+    else if(data.player==4){
+        game.playerFour.isSelected=true;
+        initialisation();
+        this.newPong.displayGame('Game Id : '+data.roomId);
+    }
 });
 
 socket.on('player2', (data) => {
@@ -118,12 +167,56 @@ socket.on('player2', (data) => {
     initialisation();
 });
 
+socket.on('2V2player2', (data) => {
+    this.newPong = new Game(data.roomId);
+    this.newPong.displayGame(`Game ID : ${data.roomId} ! Waiting other players ...`);
+    //document.getElementById('startGame').disabled=false;
+    game.twoVStwo=true;
+    game.playerOne.isSelected=true;
+    game.playerTwo.isSelected=true;
+    game.playerTwo.amI=true;
+});
+
+socket.on('2V2player3',(data)=>{
+    this.newPong = new Game(data.roomId);
+    this.newPong.displayGame(`Game ID : ${data.roomId} ! Waiting other players ...`);
+    //document.getElementById('startGame').disabled=false;
+    game.twoVStwo=true;
+    game.playerOne.isSelected=true;
+    game.playerTwo.isSelected=true;
+    game.playerThree.isSelected=true;
+    game.playerThree.amI=true;
+
+});
+
+socket.on('2V2player4',(data)=>{
+    this.newPong = new Game(data.roomId);
+    this.newPong.displayGame('Game Id : '+data.roomId);
+    document.getElementById('startGame').disabled=false;
+    game.twoVStwo=true;
+    game.playerOne.isSelected=true;
+    game.playerTwo.isSelected=true;
+    game.playerThree.isSelected=true;
+    game.playerFour.isSelected=true;
+    game.playerFour.amI=true;
+    initialisation();
+
+});
+
 socket.on('player1move',(data)=>{
-    if(game.playerTwo.amI)game.playerOne.posY=data.posY;
+    if(game.playerTwo.amI || game.playerThree.amI || game.playerFour.amI)game.playerOne.posY=data.posY;
 });
 
 socket.on('player2move',(data)=>{
-    if(game.playerOne.amI)game.playerTwo.posY=data.posY;
+    if(game.playerOne.amI || game.playerThree.amI || game.playerFour.amI)game.playerTwo.posY=data.posY;
+});
+
+socket.on('player3move',(data)=>{
+    if(game.playerOne.amI || game.playerTwo.amI || game.playerFour.amI)game.playerThree.posY=data.posY;
+});
+
+socket.on('player4move',(data)=>{
+    if(game.playerOne.amI || game.playerTwo.amI || game.playerThree.amI)game.playerFour.posY=data.posY;
 });
 
 socket.on('ballmove',(data)=>{
@@ -132,46 +225,82 @@ socket.on('ballmove',(data)=>{
 });
 
 socket.on('scoreUpdate',(data)=>{
-    if(data.player==='player1')game.playerOne.engaging=true;
-    else if(data.player==='player2')game.playerTwo.engaging=true;
+    if(data.player==='player1'){
+        game.playerOne.engaging=true;
+        if(game.twoVStwo)game.playerThree.engaging=true;
+    }
+    else if(data.player==='player2'){
+       game.playerTwo.engaging=true;
+       if(game.twoVStwo)game.playerFour.engaging=true;
+    }
     game.playerOne.score=data.score.player1;
     game.playerTwo.score=data.score.player2;
     game.scoreLayer.clear();
     game.displayScore(game.playerOne.score,game.playerTwo.score);
-    if(game.playerOne.amI && (game.playerOne.score==='V' || game.playerTwo.score==='V')){
+    if((game.playerOne.amI || game.playerThree.amI) && (game.playerOne.score==='V' || game.playerTwo.score==='V')){
         game.gameOn=false;
         document.getElementById('messageWaiting').textContent='Click Ready to restart a game !';
         document.getElementById('messageWaiting').style.display='block';
         document.getElementById('startGame').disabled=false;
         game.playerOne.ready=false;
         game.playerTwo.ready=false;
+        if(game.twoVStwo){
+            game.playerThree.ready=false;
+            game.playerFour.ready=false;
+            game.beginingP3=false;
+            game.beginingP4=false;
+        }
         game.beginingP1=false;
         game.beginingP2=false;
     }
-    else if(game.playerTwo.amI && (game.playerOne.score==='V' || game.playerTwo.score==='V')){
+    else if((game.playerTwo.amI || game.playerFour.amI) && (game.playerOne.score==='V' || game.playerTwo.score==='V')){
         game.gameOn=false;
         document.getElementById('messageWaiting').textContent='Click Ready to restart a game !';
         document.getElementById('messageWaiting').style.display='block';
         document.getElementById('startGame').disabled=false;
         game.playerOne.ready=false;
         game.playerTwo.ready=false;
+        if(game.twoVStwo){
+            game.playerThree.ready=false;
+            game.playerFour.ready=false;
+            game.beginingP3=false;
+            game.beginingP4=false;
+        }
         game.beginingP1=false;
         game.beginingP2=false;
     }
 });
 
 socket.on('playerReady',(data)=>{
-    if(data.player==='player1')game.beginingP1=true;
-    if(data.player==='player2')game.beginingP2=true;
-    if(game.beginingP1 && game.beginingP2) {
-        document.getElementById('messageWaiting').textContent='';
-        document.getElementById('messageWaiting').style.display='none';
-        document.getElementById('startGame').disabled=true;
-        game.reinitGame();
-        game.gameOn = true;
-        game.beginingP1=false;
-        game.beginingP2=false;
-      }
+    if(!game.twoVStwo){
+        if(data.player==='player1')game.beginingP1=true;
+        if(data.player==='player2')game.beginingP2=true;
+        if(game.beginingP1 && game.beginingP2) {
+            document.getElementById('messageWaiting').textContent='';
+            document.getElementById('messageWaiting').style.display='none';
+            document.getElementById('startGame').disabled=true;
+            game.reinitGame();
+            game.gameOn = true;
+            game.beginingP1=false;
+            game.beginingP2=false;
+        }
+    }else{
+        if(data.player==='player1')game.beginingP1=true;
+        if(data.player==='player2')game.beginingP2=true;
+        if(data.player==='player3')game.beginingP3=true;
+        if(data.player==='player4')game.beginingP4=true;
+        if(game.beginingP1 && game.beginingP2 && game.beginingP3 && game.beginingP4) {
+            document.getElementById('messageWaiting').textContent='';
+            document.getElementById('messageWaiting').style.display='none';
+            document.getElementById('startGame').disabled=true;
+            game.reinitGame();
+            game.gameOn = true;
+            game.beginingP1=false;
+            game.beginingP2=false;
+            game.beginingP3=false;
+            game.beginingP4=false;
+        }
+    }
 
 });
 
