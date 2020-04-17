@@ -116,8 +116,8 @@ var game = {
     playerThree : {
       width : 10,
       height : 50,
-      color : "#755f0a",
-      posX : 30,
+      color : "yellow",
+      posX : 175,
       posY : 175,
       goUp : false,
       goDown : false,
@@ -134,7 +134,7 @@ var game = {
       width : 10,
       height : 50,
       color : "#75a10a",
-      posX : 650,
+      posX : 525,
       posY : 175,
       goUp : false,
       goDown : false,
@@ -163,8 +163,8 @@ var game = {
     if(this.twoVStwo){
       this.playerOne.posY=100-(this.playerOne.height/2);
       this.playerThree.posY=300-(this.playerThree.height/2);
-      this.playerTwo.posY=100-(this.playerTwo.height/2);
-      this.playerFour.posY=300-(this.playerFour.height/2);
+      this.playerTwo.posY=300-(this.playerTwo.height/2);
+      this.playerFour.posY=100-(this.playerFour.height/2);
     }
     this.displayPlayers();
 
@@ -208,7 +208,6 @@ var game = {
         game.display.drawRectangleInLayer(this.playersBallLayer, this.playerOne.width, this.playerOne.height, this.playerOne.color, this.playerOne.posX, this.playerOne.posY);
         game.display.drawRectangleInLayer(this.playersBallLayer, this.playerTwo.width, this.playerTwo.height, this.playerTwo.color, this.playerTwo.posX, this.playerTwo.posY);
       }else{
-        console.log('p1 : '+this.playerOne.posY);
         game.display.drawRectangleInLayer(this.playersBallLayer, this.playerOne.width, this.playerOne.height, this.playerOne.color, this.playerOne.posX, this.playerOne.posY);
         game.display.drawRectangleInLayer(this.playersBallLayer, this.playerTwo.width, this.playerTwo.height, this.playerTwo.color, this.playerTwo.posX, this.playerTwo.posY);
         game.display.drawRectangleInLayer(this.playersBallLayer, this.playerThree.width, this.playerThree.height, this.playerThree.color, this.playerThree.posX, this.playerThree.posY);
@@ -263,27 +262,26 @@ var game = {
             if(game.playerOne.amI){
               if ( game.playerOne.goUp && game.playerOne.posY > 0) {
                 game.playerOne.posY-=5;
-                console.log('1 : '+game.playerOne.posY);
-              } else if ( game.playerOne.goDown && game.playerOne.posY < game.playerThree.posY - game.playerOne.height) {
+              } else if ( game.playerOne.goDown && game.playerOne.posY < game.groundHeight - game.playerOne.height) {
                 game.playerOne.posY+=5;
               }
             }
             else if(game.playerTwo.amI){
               if ( game.playerTwo.goUp && game.playerTwo.posY > 0) {
                 game.playerTwo.posY-=5;
-              } else if ( game.playerTwo.goDown && game.playerTwo.posY < game.playerThree.posY - game.playerTwo.height) {
+              } else if ( game.playerTwo.goDown && game.playerTwo.posY < game.groundHeight - game.playerTwo.height) {
                 game.playerTwo.posY+=5;
               }
             }
             else if(game.playerThree.amI){
-              if ( game.playerThree.goUp && game.playerThree.posY > game.playerOne.posY+game.playerOne.height) {
+              if ( game.playerThree.goUp && game.playerThree.posY > 0) {
                 game.playerThree.posY-=5;
               } else if ( game.playerThree.goDown && game.playerThree.posY < game.groundHeight - game.playerThree.height) {
                 game.playerThree.posY+=5;
               }
             }
             else if(game.playerFour.amI){
-              if ( game.playerFour.goUp && game.playerFour.posY > game.playerTwo.posY+game.playerTwo.height) {
+              if ( game.playerFour.goUp && game.playerFour.posY > 0) {
                 game.playerFour.posY-=5;
               } else if ( game.playerFour.goDown && game.playerFour.posY < game.groundHeight - game.playerFour.height) {
                 game.playerFour.posY+=5;
@@ -295,21 +293,21 @@ var game = {
             if(game.playerOne.amI){
               if (game.playerOne.goUp && game.playerOne.posY > game.control.mousePointer && game.playerOne.posY > 0)
                 game.playerOne.posY-=5;
-              else if (game.playerOne.goDown && game.playerOne.posY < game.control.mousePointer && game.playerOne.posY < game.playerThree.posY - game.playerOne.height)
+              else if (game.playerOne.goDown && game.playerOne.posY < game.control.mousePointer && game.playerOne.posY < game.groundHeight - game.playerOne.height)
                 game.playerOne.posY+=5;
               }
             else if(game.playerTwo.amI){
               if (game.playerTwo.goUp && game.playerTwo.posY > game.control.mousePointer && game.playerTwo.posY > 0)
                 game.playerTwo.posY-=5;
-              else if (game.playerTwo.goDown && game.playerTwo.posY < game.control.mousePointer && game.playerTwo.posY < game.playerFour.posY - game.playerTwo.height)
+              else if (game.playerTwo.goDown && game.playerTwo.posY < game.control.mousePointer && game.playerTwo.posY < game.groundHeight - game.playerTwo.height)
                 game.playerTwo.posY+=5;
             }else if(game.playerThree.amI){
-              if (game.playerThree.goUp && game.playerThree.posY > game.control.mousePointer && game.playerThree.posY > game.playerOne.posY+game.playerOne.height)
+              if (game.playerThree.goUp && game.playerThree.posY > game.control.mousePointer && game.playerThree.posY > 0)
                 game.playerThree.posY-=5;
               else if (game.playerThree.goDown && game.playerThree.posY < game.control.mousePointer && game.playerThree.posY < game.groundHeight - game.playerThree.height)
                 game.playerThree.posY+=5;
             }else if(game.playerFour.amI){
-              if (game.playerFour.goUp && game.playerFour.posY > game.control.mousePointer && game.playerFour.posY > game.playerTwo.posY+game.playerTwo.height)
+              if (game.playerFour.goUp && game.playerFour.posY > game.control.mousePointer && game.playerFour.posY > 0)
                 game.playerFour.posY-=5;
               else if (game.playerFour.goDown && game.playerFour.posY < game.control.mousePointer && game.playerFour.posY < game.groundHeight - game.playerFour.height)
                 game.playerFour.posY+=5;
@@ -336,12 +334,16 @@ var game = {
       }
       if(this.twoVStwo){
         if ( this.ball.collide(game.playerThree) ) {
-          this.changeBallPath(game.playerThree, game.ball);
-          this.playerSound.play();
+          if(this.ball.directionX<0){
+            this.changeBallPath(game.playerThree, game.ball);
+            this.playerSound.play();
+          }
         }
         if ( this.ball.collide(game.playerFour) ) {
-          this.changeBallPath(game.playerFour, game.ball);
-          this.playerSound.play();
+          if(this.ball.directionX>0){
+            this.changeBallPath(game.playerFour, game.ball);
+            this.playerSound.play();
+          }
         }
       }
     },
@@ -447,8 +449,8 @@ ballOnPlayer : function(player, ball) {
       }else{
         this.playerOne.posY=100-(this.playerOne.height/2);
         this.playerThree.posY=300-(this.playerThree.height/2);
-        this.playerTwo.posY=100-(this.playerTwo.height/2);
-        this.playerFour.posY=300-(this.playerFour.height/2);
+        this.playerTwo.posY=300-(this.playerTwo.height/2);
+        this.playerFour.posY=100-(this.playerFour.height/2);
       }
       this.playerTwo.score = 0;
       this.scoreLayer.clear();
